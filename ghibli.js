@@ -86,8 +86,11 @@ const building = {
 const fetching = {
     //  fetch via promise
     promise: (url) => {
+        const link = baseUrl + url;
+        const cb = url.slice(0, -1);
+
         //  fetch from a given url
-        fetch(baseUrl + url)
+        fetch(link)
             //  convert received data to JSON
             .then((data) => data.json())
             //  PROCESS DATA HERE
@@ -95,10 +98,14 @@ const fetching = {
                 building.repopulate(
                     data,
                     "main",
-                    building.construct[url.slice(0, -1)]
+                    building.construct[cb]
                     );
                     
-                    building.repopulate(data, "aside", building.code);
+                    building.repopulate(
+                        data,
+                        "aside",
+                        building.code
+                    );
                 })
                 //  In case of errors, log them
                 .catch((error) => {
@@ -109,9 +116,12 @@ const fetching = {
     //  async fetch
     //  notice ASYNC keyword
     async: async (url) => {
+        const link = baseUrl + url;
+        const cb = url.slice(0, -1);
+
         //  fetch from a given URL
         //  notice AWAIT keyword
-        const request = await fetch(baseUrl + url);
+        const request = await fetch(link);
         
         //  in case of error
         if (!request.ok) {
@@ -127,10 +137,14 @@ const fetching = {
         building.repopulate(
             response,
             "main",
-            building.construct[url.slice(0, -1)]
+            building.construct[cb]
         );
 
-        building.repopulate(response, "aside", building.code);
+        building.repopulate(
+            response,
+            "aside",
+            building.code
+        );
     },
 };
 
